@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studio Anjana - Order Tracking System</title>
+    <style>
+        :root {
+            --primary-color: #3a3a3a;
+            --secondary-color: #f0f0f0;
+            --accent-color: #006efd;
+            --danger-color: #ff6b6b;
+            --success-color: #51cf66;
+            --text-color: #333;
+            --light-text: #666;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .logo span {
+            color: var(--accent-color);
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            background: var(--secondary-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .tab {
+            padding: 12px 20px;
+            cursor: pointer;
+            background: transparent;
+            border: none;
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--light-text);
+            transition: all 0.3s ease;
+        }
+        
+        .tab.active {
+            background: var(--accent-color);
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        h2 {
+            color: var(--accent-color);
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border 0.3s ease;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--accent-color);
+            outline: none;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .form-col {
+            flex: 1;
+        }
+        
+        .check-group {
+            margin: 15px 0;
+        }
+        
+        .transport-details {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: var(--secondary-color);
+            border-radius: 8px;
+            display: none;
+        }
+        
+        button {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        button:hover {
+            background-color: #7d5ec2;
+        }
+        
+        .btn-secondary {
+            background-color: var(--light-text);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #555;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        th {
+            background-color: var(--accent-color);
+            color: white;
+            font-weight: 500;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        
+        .action-btn {
+            padding: 6px 12px;
+            margin-right: 5px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .view-btn {
+            background-color: var(--accent-color);
+        }
+        
+        .delete-btn {
+            background-color: var(--danger-color);
+        }
+        
+        .print-btn {
+            background-color: var(--success-color);
+        }
+        
+        .print-area {
+            display: none;
+            padding: 30px;
+            background: white;
+            margin-top: 30px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+        }
+        
+        .bill-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .bill-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+        
+        .bill-detail {
+            margin-bottom: 10px;
+        }
+        
+        .bill-items {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        
+        .bill-items th, .bill-items td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        
+        .bill-total {
+            text-align: right;
+            margin-top: 20px;
+        }
+        
+        .bill-footer {
+            margin-top: 50px;
+            text-align: center;
+        }
+        
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .print-area, .print-area * {
+                visibility: visible;
+            }
+            .print-area {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                display: block;
+            }
+            .no-print {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .tabs {
+                margin-top: 20px;
+                width: 100%;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">Studio <span>Anjana</span></div>
+            <div>
+                <p>Agalawatta rd, Pimbura, Sri Lanka</p>
+                <p>+94 78 122 0468 / +94 70 397 3559</p>
+            </div>
+        </header>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="openTab(event, 'new-order')">New Order</button>
+            <button class="tab" onclick="openTab(event, 'order-list')">Order List</button>
+        </div>
+        
+        <div id="new-order" class="tab-content active">
+            <h2>Create New Order</h2>
+            <form id="orderForm">
+                <div class="form-row">
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="date">Date:</label>
+                            <input type="date" id="date" name="date" required>
+                        </div>
+                    </div>
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="dueDate">Due Date:</label>
+                            <input type="date" id="dueDate" name="dueDate" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="customerName">Customer Name:</label>
+                            <input type="text" id="customerName" name="customerName" placeholder="Full Name" required>
+                        </div>
+                    </div>
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="phone">Phone Number:</label>
+                            <input type="tel" id="phone" name="phone" placeholder="+94 XX XXX XXXX" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email Address:</label>
+                    <input type="email" id="email" name="email" placeholder="customer@example.com">
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="orderType">Order Type:</label>
+                            <select id="orderType" name="orderType" required>
+                                <option value="">Select Order Type</option>
+                                <option value="Photo shoot">Photo shoot</option>
+                                <option value="Print">Print</option>
+                                <option value="Frame">Frame</option>
+                                <option value="Video shoot">Video shoot</option>
+                                <option value="Graphic design">Graphic design</option>
+                                <option value="Album design">Album design</option>
+                                <option value="Printout">Printout</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="price">Price (Rs):</label>
+                            <input type="number" id="price" name="price" min="0" step="0.01" required onchange="calculateTotal()">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description">Order Description:</label>
+                    <textarea id="description" name="description" rows="4" placeholder="Detailed description of the order" required></textarea>
+                </div>
+                
+                <div class="check-group">
+                    <input type="checkbox" id="needsTransport" name="needsTransport" onchange="toggleTransport()">
+                    <label for="needsTransport">Order Requires Transport</label>
+                </div>
+
+                <hr>
+                
+                <div id="transportDetails" class="transport-details">
+                    <div class="form-group">
+                        <label for="address">Delivery Address:</label>
+                        <textarea id="address" name="address" rows="3" placeholder="Full delivery address"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="additionalPhone">Additional Phone Number:</label>
+                        <input type="tel" id="additionalPhone" name="additionalPhone" placeholder="+94 XX XXX XXXX">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="transportFee">Transport Fee (Rs):</label>
+                        <input type="number" id="transportFee" name="transportFee" min="0" step="0.01" value="0" onchange="calculateTotal()">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="totalFee">Total Fee (Rs):</label>
+                    <input type="number" id="totalFee" name="totalFee" readonly>
+                </div>
+                
+                <button type="submit">Submit Order</button>
+                <button type="button" onclick="resetForm()" class="btn-secondary">Reset Form</button>
+            </form>
+        </div>
+        
+        <div id="order-list" class="tab-content">
+            <h2>Order List</h2>
+            <table id="orderTable">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Date</th>
+                        <th>Customer</th>
+                        <th>Order Type</th>
+                        <th>Due Date</th>
+                        <th>Total Fee</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="orderTableBody">
+                    <!-- Order data will be loaded here -->
+                </tbody>
+            </table>
+        </div>
+        
+        <div id="printArea" class="print-area">
+            <div class="bill-header">
+                <h1>Studio Anjana</h1>
+                <p>Agalawatta rd, Pimbura, Sri Lanka</p>
+                <p>+94 78 122 0468 / +94 70 397 3559</p>
+                <h2>INVOICE</h2>
+            </div>
+            
+            <div class="bill-info">
+                <div class="bill-to">
+                    <h3>Bill To:</h3>
+                    <p id="billCustomerName"></p>
+                    <p id="billCustomerPhone"></p>
+                    <p id="billCustomerEmail"></p>
+                    <p id="billCustomerAddress"></p>
+                </div>
+                
+                <div class="bill-details">
+                    <div class="bill-detail"><strong>Invoice #:</strong> <span id="billOrderId"></span></div>
+                    <div class="bill-detail"><strong>Date:</strong> <span id="billDate"></span></div>
+                    <div class="bill-detail"><strong>Due Date:</strong> <span id="billDueDate"></span></div>
+                </div>
+            </div>
+            
+            <table class="bill-items">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td id="billDescription"></td>
+                        <td id="billPrice"></td>
+                    </tr>
+                    <tr id="billTransportRow">
+                        <td>Transport Fee</td>
+                        <td id="billTransport"></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="bill-total">
+                <h3>Total: Rs <span id="billTotal"></span></h3>
+            </div>
+            
+            <div class="bill-footer">
+                <p>Thank you for your business!</p>
+                <p>Studio Anjana | studio.anjana00@gmail.com</p>
+            </div>
+            
+            <div class="no-print" style="margin-top: 20px; text-align: center;">
+                <button onclick="window.print()">Print Invoice</button>
+                <button onclick="sendInvoiceEmail()" class="btn-secondary">Email Invoice</button>
+                <button onclick="sendInvoiceWhatsapp()" class="btn-secondary">Send via WhatsApp</button>
+                <button onclick="closePrintArea()" class="btn-secondary">Close</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuid.min.js"></script>
+    <script>
+        // Initialize orders array from localStorage or create a new one
+        let orders = JSON.parse(localStorage.getItem('studioOrders')) || [];
+        
+        // Set today's date as default
+        document.getElementById('date').valueAsDate = new Date();
+        
+        // Function to toggle transport details section
+        function toggleTransport() {
+            const transportDetails = document.getElementById('transportDetails');
+            const needsTransport = document.getElementById('needsTransport').checked;
+            
+            transportDetails.style.display = needsTransport ? 'block' : 'none';
+            
+            if (!needsTransport) {
+                document.getElementById('transportFee').value = 0;
+                calculateTotal();
+            }
+        }
+        
+        // Function to calculate total fee
+        function calculateTotal() {
+            const price = parseFloat(document.getElementById('price').value) || 0;
+            const transportFee = parseFloat(document.getElementById('transportFee').value) || 0;
+            const totalFee = price + transportFee;
+            
+            document.getElementById('totalFee').value = totalFee.toFixed(2);
+        }
+        
+        // Function to reset the form
+        function resetForm() {
+            document.getElementById('orderForm').reset();
+            document.getElementById('date').valueAsDate = new Date();
+            document.getElementById('transportDetails').style.display = 'none';
+            document.getElementById('totalFee').value = '';
+        }
+        
+        // Function to open tabs
+        function openTab(evt, tabName) {
+            // Hide all tab content
+            const tabContent = document.getElementsByClassName('tab-content');
+            for (let i = 0; i < tabContent.length; i++) {
+                tabContent[i].classList.remove('active');
+            }
+            
+            // Remove active class from all tabs
+            const tabs = document.getElementsByClassName('tab');
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+            
+            // Show the specific tab content and add active class to the button
+            document.getElementById(tabName).classList.add('active');
+            evt.currentTarget.classList.add('active');
+            
+            // If order list tab is opened, refresh the table
+            if (tabName === 'order-list') {
+                loadOrdersTable();
+            }
+        }
+        
+        // Function to load orders into the table
+        function loadOrdersTable() {
+            const tableBody = document.getElementById('orderTableBody');
+            tableBody.innerHTML = '';
+            
+            orders.forEach(order => {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>${order.id.substring(0, 8)}</td>
+                    <td>${formatDate(order.date)}</td>
+                    <td>${order.customerName}</td>
+                    <td>${order.orderType}</td>
+                    <td>${formatDate(order.dueDate)}</td>
+                    <td>Rs ${parseFloat(order.totalFee).toFixed(2)}</td>
+                    <td>
+                        <button class="action-btn view-btn" onclick="viewOrder('${order.id}')">View</button>
+                        <button class="action-btn print-btn" onclick="printInvoice('${order.id}')">Invoice</button>
+                        <button class="action-btn delete-btn" onclick="deleteOrder('${order.id}')">Delete</button>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+        }
+        
+        // Format date for display
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString();
+        }
+        
+        // View order details
+        function viewOrder(orderId) {
+            const order = orders.find(o => o.id === orderId);
+            if (order) {
+                alert(`
+                    Order ID: ${order.id.substring(0, 8)}
+                    Date: ${formatDate(order.date)}
+                    Customer: ${order.customerName}
+                    Phone: ${order.phone}
+                    Email: ${order.email || 'N/A'}
+                    Order Type: ${order.orderType}
+                    Description: ${order.description}
+                    Due Date: ${formatDate(order.dueDate)}
+                    Price: Rs ${parseFloat(order.price).toFixed(2)}
+                    ${order.needsTransport ? `Transport Fee: Rs ${parseFloat(order.transportFee).toFixed(2)}` : ''}
+                    ${order.needsTransport ? `Delivery Address: ${order.address}` : ''}
+                    ${order.needsTransport && order.additionalPhone ? `Additional Phone: ${order.additionalPhone}` : ''}
+                    Total: Rs ${parseFloat(order.totalFee).toFixed(2)}
+                `);
+            }
+        }
+        
+        // Delete order
+        function deleteOrder(orderId) {
+            if (confirm('Are you sure you want to delete this order?')) {
+                orders = orders.filter(o => o.id !== orderId);
+                saveOrders();
+                loadOrdersTable();
+            }
+        }
+        
+        // Print invoice
+        function printInvoice(orderId) {
+            const order = orders.find(o => o.id === orderId);
+            if (order) {
+                // Fill the print area with order details
+                document.getElementById('billOrderId').textContent = order.id.substring(0, 8);
+                document.getElementById('billDate').textContent = formatDate(order.date);
+                document.getElementById('billDueDate').textContent = formatDate(order.dueDate);
+                document.getElementById('billCustomerName').textContent = order.customerName;
+                document.getElementById('billCustomerPhone').textContent = order.phone;
+                document.getElementById('billCustomerEmail').textContent = order.email || 'N/A';
+                document.getElementById('billCustomerAddress').textContent = order.needsTransport ? order.address : '';
+                document.getElementById('billDescription').textContent = `${order.orderType}: ${order.description}`;
+                document.getElementById('billPrice').textContent = `Rs ${parseFloat(order.price).toFixed(2)}`;
+                
+                if (order.needsTransport) {
+                    document.getElementById('billTransportRow').style.display = 'table-row';
+                    document.getElementById('billTransport').textContent = `Rs ${parseFloat(order.transportFee).toFixed(2)}`;
+                } else {
+                    document.getElementById('billTransportRow').style.display = 'none';
+                }
+                
+                document.getElementById('billTotal').textContent = parseFloat(order.totalFee).toFixed(2);
+                
+                // Show the print area
+                document.getElementById('printArea').style.display = 'block';
+                
+                // Store current order ID for email/WhatsApp functions
+                window.currentOrderId = order.id;
+            }
+        }
+        
+        // Close the print area
+        function closePrintArea() {
+            document.getElementById('printArea').style.display = 'none';
+        }
+        
+        // Send invoice via email
+        function sendInvoiceEmail() {
+            const order = orders.find(o => o.id === window.currentOrderId);
+            if (!order) return;
+            
+            const customerEmail = order.email;
+            if (!customerEmail) {
+                alert('No email address available for this customer.');
+                return;
+            }
+            
+            const subject = `Invoice from Studio Anjana - Order #${order.id.substring(0, 8)}`;
+            const body = `
+Dear ${order.customerName},
+
+Thank you for your order with Studio Anjana. Please find your invoice details below:
+
+Order ID: ${order.id.substring(0, 8)}
+Date: ${formatDate(order.date)}
+Due Date: ${formatDate(order.dueDate)}
+Order Type: ${order.orderType}
+Description: ${order.description}
+Price: Rs ${parseFloat(order.price).toFixed(2)}
+${order.needsTransport ? `Transport Fee: Rs ${parseFloat(order.transportFee).toFixed(2)}` : ''}
+Total Amount: Rs ${parseFloat(order.totalFee).toFixed(2)}
+
+${order.needsTransport ? `Delivery Address: ${order.address}` : ''}
+
+If you have any questions, please contact us at:
+Phone: +94 78 122 0468 / +94 70 397 3559
+Email: studio.anjana00@gmail.com
+Address: Studio Anjana, Agalawatta rd, Pimbura, Sri Lanka
+
+Thank you for your business!
+Studio Anjana Team
+            `;
+            
+            // Create a mailto link
+            const mailtoLink = `mailto:${customerEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.open(mailtoLink);
+        }
+        
+        // Send invoice via WhatsApp
+        function sendInvoiceWhatsapp() {
+            const order = orders.find(o => o.id === window.currentOrderId);
+            if (!order) return;
+            
+            const customerPhone = order.phone.replace(/\s+/g, ''); // Remove spaces
+            
+            const message = `
+*Invoice from Studio Anjana*
+
+Order ID: ${order.id.substring(0, 8)}
+Date: ${formatDate(order.date)}
+Due Date: ${formatDate(order.dueDate)}
+Order Type: ${order.orderType}
+Description: ${order.description}
+Price: Rs ${parseFloat(order.price).toFixed(2)}
+${order.needsTransport ? `Transport Fee: Rs ${parseFloat(order.transportFee).toFixed(2)}` : ''}
+Total Amount: Rs ${parseFloat(order.totalFee).toFixed(2)}
+
+${order.needsTransport ? `Delivery Address: ${order.address}` : ''}
+
+Thank you for your business!
+Studio Anjana
++94 78 122 0468 / +94 70 397 3559
+            `;
+            
+            // Create a WhatsApp link
+            const whatsappLink = `https://wa.me/${customerPhone}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappLink);
+        }
+        
+        // Save orders to localStorage
+        function saveOrders() {
+            localStorage.setItem('studioOrders', JSON.stringify(orders));
+        }
+        
+        // Send notification email to studio staff
+        function sendStaffNotification(order) {
+            const studioEmail = 'studio.anjana00@gmail.com';
+            const subject = `New Order: ${order.orderType} - ${order.customerName}`;
+            const body = `
+New order received at Studio Anjana:
+
+Order ID: ${order.id.substring(0, 8)}
+Date: ${formatDate(order.date)}
+Customer: ${order.customerName}
+Phone: ${order.phone}
+Email: ${order.email || 'N/A'}
+Order Type: ${order.orderType}
+Description: ${order.description}
+Due Date: ${formatDate(order.dueDate)}
+Price: Rs ${parseFloat(order.price).toFixed(2)}
+${order.needsTransport ? `Transport Fee: Rs ${parseFloat(order.transportFee).toFixed(2)}` : ''}
+${order.needsTransport ? `Delivery Address: ${order.address}` : ''}
+${order.needsTransport && order.additionalPhone ? `Additional Phone: ${order.additionalPhone}` : ''}
+Total: Rs ${parseFloat(order.totalFee).toFixed(2)}
+            `;
+            
+            // Create a mailto link for studio staff
+            const staffMailtoLink = `mailto:${studioEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            
+            // Open the email client
+            const emailWindow = window.open(staffMailtoLink);
+            
+            // Close the email window after a short delay if it was opened
+            if (emailWindow) {
+                setTimeout(() => {
+                    emailWindow.close();
+                }, 500);
+            }
+        }
+        
+        // Form submission handler
+        document.getElementById('orderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(this);
+            const order = {
+                id: uuid.v4(),
+                date: formData.get('date'),
+                customerName: formData.get('customerName'),
+                phone: formData.get('phone'),
+                email: formData.get('email'),
+                orderType: formData.get('orderType'),
+                description: formData.get('description'),
+                dueDate: formData.get('dueDate'),
+                price: parseFloat(formData.get('price')),
+                needsTransport: formData.get('needsTransport') === 'on',
+                address: formData.get('address') || '',
+                additionalPhone: formData.get('additionalPhone') || '',
+                transportFee: parseFloat(formData.get('transportFee')) || 0,
+                totalFee: parseFloat(formData.get('totalFee')),
+                createdAt: new Date().toISOString()
+            };
+            
+            // Add order to the array
+            orders.push(order);
+            
+            // Save to localStorage
+            saveOrders();
+            
+            // Send notification email to studio staff
+            sendStaffNotification(order);
+            
+            // Show confirmation and reset form
+            alert('Order submitted successfully! Staff notification email has been generated.');
+            resetForm();
+            
+            // Open the invoice for printing
+            printInvoice(order.id);
+        });
+        
+        // Load orders table on page load
+        loadOrdersTable();
+    </script>
+</body>
+</html>
